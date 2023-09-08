@@ -34,24 +34,26 @@ This task executed according technical requirements described in [file](https://
    ```shell
    pip install -r requirements.txt
    ```
-6. For this app you need to have docker installed. Run command to start infrastructure stuff available.
+6. In this project sensitive data moved to `.env.sample` file. \
+   Please rename it `.env.sample -> .env` before running server.
+   It is necessary for docker and server start!
+
+7. For this app you need to have docker installed. Run command to start infrastructure stuff available.
    ```shell
    docker-compose up --build
    ```
 
-7. Apply database migrations & and prepared data for testing:
+8. Apply database migrations & and load prepared data (printers fixture) for testing:
    ```shell
    python manage.py migrate
    ```
 
-8. Run server:
+9. Run server:
 
-   In this project sensitive data moved to `.env.sample` file. \
-   Please rename it `.env.sample -> .env` before running server.
    ```shell
    python manage.py runserver
    ```
-9. Start celery worker in separate terminal for asynchronous tasks:
+10. Start celery worker in separate terminal for asynchronous tasks:
    ```shell
    celery -A SheepFish_test_task worker --loglevel=info
    ```
