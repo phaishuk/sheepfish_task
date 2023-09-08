@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  title: SheepFish_test_task
+  version: 1.0.0
+  description: This is test task for python developer postition at SheepFish
+paths:
+  /api/check_handling_service/checks/:
+    get:
+      operationId: check_handling_service_checks_list
+      tags:
+      - check_handling_service
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Check'
+          description: ''
+    post:
+      operationId: check_handling_service_checks_create
+      tags:
+      - check_handling_service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CheckCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CheckCreate'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckCreate'
+          description: ''
+  /api/check_handling_service/checks/{id}/:
+    get:
+      operationId: check_handling_service_checks_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this check.
+        required: true
+      tags:
+      - check_handling_service
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Check'
+          description: ''
+  /api/check_handling_service/printers/download_check/:
+    post:
+      operationId: check_handling_service_printers_download_check_create
+      tags:
+      - check_handling_service
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                file_path:
+                  type: string
+              required:
+              - file_path
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          description: 'PDF file'
+  /api/check_handling_service/printers/rendered_checks/:
+    get:
+      operationId: check_handling_service_printers_rendered_checks_retrieve
+      tags:
+      - check_handling_service
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Printer'
+          description: ''
+components:
+  schemas:
+    Check:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        printer_id:
+          type: integer
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        order:
+          type: object
+          additionalProperties: {}
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        pdf_file:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - id
+      - order
+      - printer_id
+      - status
+      - type
+    CheckCreate:
+      type: object
+      properties:
+        order_number:
+          type: integer
+        point_id:
+          type: integer
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+      - items
+      - order_number
+      - point_id
+    CheckTypeEnum:
+      enum:
+      - kitchen
+      - client
+      type: string
+      description: |-
+        * `kitchen` - Kitchen
+        * `client` - Client
+    Printer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        api_key:
+          type: string
+          maxLength: 255
+        check_type:
+          $ref: '#/components/schemas/CheckTypeEnum'
+        point_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - api_key
+      - check_type
+      - id
+      - name
+      - point_id
+    StatusEnum:
+      enum:
+      - new
+      - rendered
+      - printed
+      type: string
+      description: |-
+        * `new` - New
+        * `rendered` - Rendered
+        * `printed` - Printed
+    TypeEnum:
+      enum:
+      - kitchen
+      - client
+      type: string
+      description: |-
+        * `kitchen` - Kitchen
+        * `client` - Client
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
