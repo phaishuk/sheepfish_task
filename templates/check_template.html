@@ -1,0 +1,60 @@
+{% load filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Чек №{{ order_number }}</title>
+    <meta charset="UTF-8">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Чек №{{ order_number }}</h1>
+    <p>Замовлення для точки №{{ point_id }}</p>
+    <p>Тип чеку: <strong> {{ check_type }} </strong></p>
+    <p>Дата і час створення чеку: {{ order_datetime|date:"d-m-Y H:i:s" }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Тип</th>
+                <th>Назва</th>
+                <th>Кількість</th>
+                <th>Ціна за одиницю</th>
+                <th>Загальна ціна</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.type }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.quantity|multiply:item.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p><strong>Загальна сума замовлення: {{ total_price }} </strong> </p>
+</body>
+</html>
