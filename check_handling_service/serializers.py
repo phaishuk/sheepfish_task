@@ -6,7 +6,7 @@ from check_handling_service.models import Check, Printer
 class PrinterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Printer
-        fields = ("id", "name", "api_name", "check_type", "point_id")
+        fields = ("id", "name", "api_key", "check_type", "point_id")
 
 
 class CheckSerializer(serializers.ModelSerializer):
