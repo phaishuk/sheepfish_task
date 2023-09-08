@@ -116,8 +116,8 @@ and changes appropriate statuses.
 
 4. `GET /api/check_handling_service/printers/rendered_checks/`
 
-   On this endpoint you can send request with parameters:
-   For example:
+   On this endpoint you can send GET request with parameters:
+   For example: GET
    `http://127.0.0.1:8000/api/check_handling_service/printers/rendered_checks/?api_key=78451146`
    Where `78451146` is a parameter to see the checks generated for printer, have to be given with `?api_key=`.
 
@@ -126,7 +126,7 @@ and changes appropriate statuses.
    You need to send json like:
    ```json
    {
-    "file_path": "media/pdf/12345_kitchen.pdf"
+       "file_path": "media/pdf/12345_kitchen.pdf"
    }
    ```
    This path you can easily find using _rendered_checks_ endpoint.
